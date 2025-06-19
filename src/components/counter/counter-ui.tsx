@@ -59,6 +59,8 @@ export function CounterCreate() {
         />
         <Button
           onClick={()=> submitHandler()}
+          disabled={!isFormValid || createEntry.isPending}
+          variant={"default"}
         >
           Create
         </Button>
@@ -129,25 +131,34 @@ function CounterCard({ account }: { account: PublicKey }) {
         <div className="space-y-6">
           <h2
             className="card-title justify-center text-3xl cursor-pointer"
-            onClick={() => accountQuery.refetch()}
+            
           >
             {accountQuery.data?.title}
+            
           </h2>
+          <Button
+          onClick={() => accountQuery.refetch()}
+          variant={"link"}
+          color='blue'
+          >
+            Refresh Entry
+          </Button>
           <p>{accountQuery.data?.message}</p>
-          <div className="card-actions justify-around">
+          <div className="card-actions justify-around ">
             <textarea
               placeholder="Update message here"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               className="textarea textarea-bordered w-full max-w-xs"
             />
-            <button
-              className="btn btn-xs lg:btn-md btn-primary"
+            <Button
+              // className="btn btn-xs lg:btn-md btn-primary"
               onClick={handleSubmit}
               disabled={updateEntry.isPending || !isFormValid}
+              variant={"secondary"}
             >
               Update Journal Entry {updateEntry.isPending && "..."}
-            </button>
+            </Button>
           </div>
           <div className="text-center space-y-4">
             <p>
@@ -156,7 +167,7 @@ function CounterCard({ account }: { account: PublicKey }) {
                 label={ellipsify(account.toString())}
               />
             </p>
-            <button
+            <Button
               className="btn btn-xs btn-secondary btn-outline"
               onClick={() => {
                 if (
@@ -172,9 +183,10 @@ function CounterCard({ account }: { account: PublicKey }) {
                 }
               }}
               disabled={deleteEntry.isPending}
+              variant={"destructive"}
             >
               Close
-            </button>
+            </Button>
           </div>
         </div>
       </div>
