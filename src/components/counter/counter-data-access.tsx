@@ -2,7 +2,7 @@
 
 import { getCounterProgram, getCounterProgramId } from '@project/anchor'
 import { useConnection } from '@solana/wallet-adapter-react'
-import { Cluster, Keypair, PublicKey } from '@solana/web3.js'
+import { Cluster, PublicKey } from '@solana/web3.js'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { useCluster } from '../cluster/cluster-data-access'
@@ -13,7 +13,7 @@ import { toast } from 'sonner'
 interface createEntryArgs {
   title: string
   message: string
-  owner: PublicKey 
+   
 }
 
 export function useCounterProgram() {
@@ -36,7 +36,7 @@ export function useCounterProgram() {
 
   const createEntry = useMutation<string, Error, createEntryArgs>({
     mutationKey: ['journalEntry', 'create', { cluster }],
-    mutationFn: async ({title, message, owner}) => {
+    mutationFn: async ({title, message}) => {
       // const [journalEntryAddress] =  PublicKey.findProgramAddressSync(
       //   [Buffer.from(title), owner.toBuffer()],
       //   programId
@@ -76,11 +76,8 @@ export function useCounterProgramAccount({ account }: { account: PublicKey }) {
 
   const updateEntry = useMutation<string, Error, createEntryArgs>({
     mutationKey: ['journalEntry', 'update', { cluster, account }],
-    mutationFn:  async ({title, message, owner}) => {
-      const [journalEntryAddress] =  PublicKey.findProgramAddressSync(
-        [Buffer.from(title), owner.toBuffer()],
-        programId
-      );
+    mutationFn:  async ({title, message}) => {
+      
       return program.methods.update(title, message).rpc();
     },
     onSuccess: async (tx) => {

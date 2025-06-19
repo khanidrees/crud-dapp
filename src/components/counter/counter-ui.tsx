@@ -1,12 +1,12 @@
 'use client'
 
-import { Keypair, PublicKey } from '@solana/web3.js'
-import { useMemo, useState } from 'react'
+import {  PublicKey } from '@solana/web3.js'
+import {  useState } from 'react'
 import { ExplorerLink } from '../cluster/cluster-ui'
 import { useCounterProgram, useCounterProgramAccount } from './counter-data-access'
 import { ellipsify } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
+// import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { useWallet } from '@solana/wallet-adapter-react'
 
 export function CounterCreate() {
@@ -23,7 +23,7 @@ export function CounterCreate() {
     }
     try {
       console.log(publicKey, 'publicKey');
-      const signature = await createEntry.mutateAsync({ title, message, owner: publicKey as PublicKey });
+      const signature = await createEntry.mutateAsync({ title, message });
       console.log('Journal entry created with signature:', signature);
       setTitle('');
       setMessage('');
@@ -113,7 +113,7 @@ function CounterCard({ account }: { account: PublicKey }) {
 
   const handleSubmit = () => {
     if (publicKey && isFormValid && title) {
-      updateEntry.mutateAsync({ title, message, owner: publicKey });
+      updateEntry.mutateAsync({ title, message });
     }
   };
 
