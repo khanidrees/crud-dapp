@@ -2,14 +2,14 @@
 
 use anchor_lang::prelude::*;
 
-declare_id!("FqzkXZdwYjurnUKetJCAvaUw5WAqbwzU6gZEwydeEfqS");
+declare_id!("CcZL6ZukdvR2KTUxGttsjD9tDWtUk5oLBphpL8nyLdP5");
 
 #[program]
 pub mod journal {
     use super::*;
 
     pub fn create(
-        ctx: Context<CreateJournal>,
+        ctx: Context<CreateEntry>,
         title: String,
         message: String,    
     ) -> Result<()> {
@@ -21,12 +21,29 @@ pub mod journal {
         Ok(())
     }
 
+    pub fn update(
+        ctx: Context<UpdateEntry>,
+        _title: String,
+        message: String,
+    ) -> Result<()> {
+        let journal_entry = &mut ctx.accounts.journal_entry;
+        journal_entry.message = message;
+
+        Ok(())
+    }
+    pub fn delete(
+        _ctx: Context<DeleteEntry>,
+        _title: String,
+    ) -> Result<()> {
+        Ok(())
+    }
+
    
 }
 
 #[derive(Accounts)]
 #[instruction(title: String)]
-pub struct CreateJournal<'info> {
+pub struct CreateEntry<'info> {
     #[account(
         init,
         payer = owner,
@@ -50,3 +67,34 @@ pub struct JournalEntryState {
     pub message: String,
 } 
 
+#[derive(Accounts)]
+#[instruction(title: String)]
+pub struct UpdateEntry<'info> {
+    #[account(
+        mut,
+        seeds = [title.as_bytes(), owner.key().as_ref()],
+        bump,
+        realloc = 8 + JournalEntryState::INIT_SPACE ,
+        realloc::payer = owner, 
+        realloc::zero = true,
+    )]
+    pub journal_entry: Account<'info, JournalEntryState>,
+    #[account(mut)]
+    pub owner: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
+
+#[derive(Accounts)]
+#[instruction(title: String)]
+pub struct DeleteEntry<'info> {
+    #[account(
+        mut,
+        seeds = [title.as_bytes(), owner.key().as_ref()],
+        bump,
+        close = owner, // Close the account and transfer lamports to the owner
+    )]
+    pub journal_entry: Account<'info, JournalEntryState>,
+    #[account(mut)]
+    pub owner: Signer<'info>,
+    pub system_program: Program<'info, System>,
+}
