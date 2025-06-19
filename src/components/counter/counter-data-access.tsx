@@ -67,7 +67,7 @@ export function useCounterProgramAccount({ account }: { account: PublicKey }) {
   const { cluster } = useCluster()
   const transactionToast = useTransactionToast()
   const { program, accounts } = useCounterProgram()
-  const programId = useMemo(() => getCounterProgramId(cluster.network as Cluster), [cluster])
+  // const programId = useMemo(() => getCounterProgramId(cluster.network as Cluster), [cluster])
 
   const accountQuery = useQuery({
     queryKey: ['counter', 'fetch', { cluster, account }],
