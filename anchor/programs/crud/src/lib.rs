@@ -13,11 +13,21 @@ pub mod journal {
         title: String,
         message: String,    
     ) -> Result<()> {
+        
         let journal_entry = &mut ctx.accounts.journal_entry;
         journal_entry.owner = ctx.accounts.owner.key();
         journal_entry.title = title;
         journal_entry.message = message;
-
+        //log
+        msg!(
+            "Journal entry created: {} by {}",
+            journal_entry.title,
+            journal_entry.owner
+        );
+        msg!(
+            "Message: {}",
+            journal_entry.message
+        );
         Ok(())
     }
 
@@ -28,7 +38,16 @@ pub mod journal {
     ) -> Result<()> {
         let journal_entry = &mut ctx.accounts.journal_entry;
         journal_entry.message = message;
-
+        //log
+        msg!(
+            "Journal entry updated: {} by {}",  
+            journal_entry.title,
+            journal_entry.owner
+        );
+        msg!(
+            "New message: {}",
+            journal_entry.message
+        );
         Ok(())
     }
     pub fn delete(

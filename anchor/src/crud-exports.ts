@@ -23,7 +23,7 @@ export function getCounterProgramId(cluster: Cluster) {
     case 'devnet':
     case 'testnet':
       // This is the program ID for the Journal program on devnet and testnet.
-      return new PublicKey('coUnmi3oBUtwtd9fjeAvSsJssXh5A5xyPbhpewyzRVF')
+      return new PublicKey('CcZL6ZukdvR2KTUxGttsjD9tDWtUk5oLBphpL8nyLdP5')
     case 'mainnet-beta':
     default:
       return COUNTER_PROGRAM_ID
